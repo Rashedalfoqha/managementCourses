@@ -1,5 +1,6 @@
 const { pool } = require("../models/db");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const register = async (req, res) => {
   const {
     photo,
@@ -12,13 +13,14 @@ const register = async (req, res) => {
     password,
     user_type
   } = req.body;
-  const bcryptPassword = await bcrypt.hash(password, process.env.PASS);
+  const salt = process.env.PASS.toString();
+  const bcryptPassword = await bcrypt.hash(password, 7);
   let role_id;
 
   if (user_type === "student") {
-    role_id = 1;
-  } else if (user_type === "teacher") {
     role_id = 2;
+  } else if (user_type === "teacher") {
+    role_id = 1;
   } else {
     res.status(400).json({
       success: false,
@@ -122,7 +124,7 @@ const login = (req, res) => {
     });
 };
 const getUserInfoById = (req, res) => {
-  const { id } = req.token;
+  const id = req.token.userId;
   const query = "SELECT * FROM users WHERE id=$1";
   const value = [id];
   pool
@@ -137,8 +139,48 @@ const getUserInfoById = (req, res) => {
       console.log(err);
     });
 };
+const updateData = (req, res) => {
+  const id = req.token.userId;
+  const { photo, cover, firstName, lastName, email, country } = req.body;
+
+  const query = `
+    UPDATE users 
+    SET 
+      photo = COALESCE($1, photo),
+      cover = COALESCE($2, cover),
+      firstName = COALESCE($3, firstName),
+      lastName = COALESCE($4, lastName),
+      email = COALESCE($5, email),
+      country = COALESCE($6, country)
+    WHERE 
+      id = $7 
+      AND is_deleted = 0 
+    RETURNING *;
+  `;
+
+  const values = [photo, cover, firstName, lastName, email, country, id];
+
+  pool
+    .query(query, values)
+    .then((result) => {
+      res.status(201).json({
+        success: true,
+        message: "Updated data successfully",
+        result: result.rows
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+        err: err.message
+      });
+    });
+};
+
 module.exports = {
   register,
   login,
-  getUserInfoById
+  getUserInfoById,
+  updateData
 };
