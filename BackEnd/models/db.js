@@ -35,7 +35,7 @@ const createTable = () => {
         role_id INT REFERENCES roles(id),
         course_id INT REFERENCES courses(id),
         photo VARCHAR,
-        user_type VARCHAR(20),
+        user_type VARCHAR(255),
         cover VARCHAR,
         firstName VARCHAR(255),
         lastName VARCHAR(255),
