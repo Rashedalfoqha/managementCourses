@@ -110,9 +110,34 @@ const updateCourses = (req, res) => {
       });
     });
 };
+const softDeletedcourses = (req, res) => {
+  const { id } = req.params;
+  const query = `UPDATE courses SET is_deleted=1 WHERE id=$1;`;
+  const data = [id];
+  pool
+    .query(query, data)
+    .then((result) => {
+      if (result.rowCount !== 0) {
+        res.status(200).json({
+          success: true,
+          message: `courses with id: ${id} deleted successfully`
+        });
+      } else {
+        throw new Error("Error happened while deleting post");
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+        err: err
+      });
+    });
+};
 module.exports = {
   updateCourses,
   getAllCoursesForUser,
   getAllCourses,
-  createCourses
+  createCourses,
+  softDeletedcourses
 };

@@ -4,7 +4,8 @@ const {
   createCourses,
   getAllCoursesForUser,
   getAllCourses,
-  updateCourses
+  updateCourses,
+  softDeletedcourses
 } = require("../controller/courses");
 const authentication = require("../middleware/authentication");
 const authorization = require("../middleware/authorization");
@@ -21,5 +22,11 @@ coursesRouter.put(
   authentication,
   authorization("UPDATE_COURSES"),
   updateCourses
+);
+coursesRouter.delete(
+  "/delete",
+  authentication,
+  authorization("DELETE_COURSES"),
+  softDeletedcourses
 );
 module.exports = coursesRouter;
