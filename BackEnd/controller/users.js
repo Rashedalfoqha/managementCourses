@@ -121,7 +121,24 @@ const login = (req, res) => {
       });
     });
 };
+const getUserInfoById = (req, res) => {
+  const { id } = req.token;
+  const query = "SELECT * FROM users WHERE id=$1";
+  const value = [id];
+  pool
+    .query(query, value)
+    .then((result) => {
+      res.status(200).json({
+        message: "users",
+        result: result.rows
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 module.exports = {
   register,
-  login
+  login,
+  getUserInfoById
 };
