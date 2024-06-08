@@ -17,7 +17,7 @@ CREATE TABLE roles (
     CREATE TABLE users (
         id SERIAL PRIMARY KEY,
         role_id INT REFERENCES roles(id),
-        course_id INT REFERENCES courses(id),
+        course_id INT,
         photo VARCHAR,
         user_type VARCHAR(255),
         cover VARCHAR,
@@ -41,8 +41,12 @@ CREATE TABLE roles (
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
     
+    ALTER TABLE users
+    ADD CONSTRAINT fk_users_courses FOREIGN KEY (course_id) REFERENCES courses(id);
+    
     CREATE TABLE users_favorites (
         id SERIAL PRIMARY KEY,
         user_id INT REFERENCES users(id),
         course_id INT REFERENCES courses(id)
     );
+    
