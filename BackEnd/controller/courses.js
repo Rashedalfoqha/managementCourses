@@ -93,5 +93,26 @@ const updateCourses = (req, res) => {
     AND is_deleted = 0 
   RETURNING *`;
   const value = [photo, video, title, description];
+  pool
+    .query(query, value)
+    .then((result) => {
+      res.status(201).json({
+        success: true,
+        message: "Updated data successfully",
+        result: result.rows
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+        err: err.message
+      });
+    });
 };
-module.exports = { getAllCoursesForUser, getAllCourses, createCourses };
+module.exports = {
+  updateCourses,
+  getAllCoursesForUser,
+  getAllCourses,
+  createCourses
+};
