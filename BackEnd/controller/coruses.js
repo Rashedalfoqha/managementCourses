@@ -39,4 +39,4 @@ const getAllCourses = (req, res) => {
     });
 };
 
-module.exports = { createCourses };
+module.exports = { getAllCourses, createCourses };
