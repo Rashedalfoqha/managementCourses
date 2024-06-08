@@ -16,5 +16,10 @@ coursesRouter.post(
 );
 coursesRouter.get("/", getAllCoursesForUser);
 coursesRouter.get("/all", getAllCourses);
-coursesRouter.put("/update", updateCourses);
+coursesRouter.put(
+  "/update",
+  authentication,
+  authorization("UPDATE_COURSES"),
+  updateCourses
+);
 module.exports = coursesRouter;
