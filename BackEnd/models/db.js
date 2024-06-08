@@ -18,18 +18,24 @@ const createTable = () => {
         id SERIAL PRIMARY KEY,
         role VARCHAR(255) NOT NULL
     );
+    
     CREATE TABLE permissions (
         id SERIAL PRIMARY KEY,
         permission VARCHAR(255) NOT NULL
     );
+    
     CREATE TABLE role_permission (
         id SERIAL PRIMARY KEY,
         role_id INT REFERENCES roles(id),
         permission_id INT REFERENCES permissions(id)
     );
-    CREATE TABLE students (
+    
+    CREATE TABLE users (
         id SERIAL PRIMARY KEY,
+        role_id INT REFERENCES roles(id),
+        course_id INT REFERENCES courses(id),
         photo VARCHAR,
+        user_type VARCHAR(20),
         cover VARCHAR,
         firstName VARCHAR(255),
         lastName VARCHAR(255),
@@ -37,41 +43,33 @@ const createTable = () => {
         age INT,
         country VARCHAR(255),
         password VARCHAR(255),
-        courses INT,
-        role_id INT REFERENCES roles(id),
         is_deleted SMALLINT DEFAULT 0
     );
+    
     CREATE TABLE courses (
         id SERIAL PRIMARY KEY,
         photo VARCHAR,
         video VARCHAR,
         title VARCHAR,
-        teachers_id INT REFERENCES teachers(id),
+        user_id INT REFERENCES users(id),
         description VARCHAR NOT NULL,
         is_deleted SMALLINT DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
-    CREATE TABLE teachers (
+    
+    CREATE TABLE users_favorites (
         id SERIAL PRIMARY KEY,
-        photo VARCHAR,
-        cover VARCHAR,
-        firstName VARCHAR(255),
-        lastName VARCHAR(255),
-        email VARCHAR(255) UNIQUE NOT NULL,
-        age INT,
-        country VARCHAR(255),
-        password VARCHAR(255),
-        courses INT,
-        role_id INT REFERENCES roles(id),
-        is_deleted SMALLINT DEFAULT 0
-    );
-    CREATE TABLE student_favorites (
-        id SERIAL PRIMARY KEY,
-        student_id INT REFERENCES students(id),
+        user_id INT REFERENCES users(id),
         course_id INT REFERENCES courses(id)
-    );`
+    );
+    `
     )
-    .then((result) => {})
-    .catch(() => {});
+    .then((result) => {
+      console.log(`created tables`);
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
 };
+// createTable()
 module.exports = { pool };
