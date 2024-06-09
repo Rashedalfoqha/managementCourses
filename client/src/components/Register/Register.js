@@ -427,12 +427,15 @@ const Register = () => {
                 </div>
               )}
               <div className="mt-10">
-                <button
-                  type="submit"
-                  className="w-max shadow-xl py-2.5 px-8 text-sm font-semibold rounded-md bg-transparent text-stone-950 border-stone-950 focus:outline-none"
-                >
-                  Register
-                </button>
+                <Link to="/login">
+                  {" "}
+                  <button
+                    type="submit"
+                    className="w-max shadow-xl py-2.5 px-8 text-sm font-semibold rounded-md bg-transparent text-stone-950 border-stone-950 focus:outline-none"
+                  >
+                    Register
+                  </button>
+                </Link>
                 <p className="text-sm mt-8">
                   Already have an account?{" "}
                   <Link to="/login">

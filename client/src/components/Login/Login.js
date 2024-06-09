@@ -122,6 +122,7 @@ const Login = () => {
                     className="ml-3"
                     onClick={() => {
                       loginHandle();
+                      navigate("/");
                     }}
                   >
                     Sign in
