@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import "../register/index.css"
 import { Link } from "react-router-dom";
 
 const Register = () => {
@@ -285,30 +286,30 @@ const Register = () => {
   };
   return (
     <>
-      <div className="font-[sans-serif] bg-white text-white md:h-screen">
-        <div className="grid md:grid-cols-2 items-center gap-8 h-full">
-          <div className="max-md:order-1 p-4">
+      <div classNameName="font-[sans-serif] bg-white text-white md:h-screen">
+        <div classNameName="grid md:grid-cols-2 items-center gap-8 h-full">
+          <div classNameName="max-md:order-1 p-4">
             <img
               src="https://readymadeui.com/signin-image.webp"
-              className="lg:max-w-[90%] w-full h-full object-contain block mx-auto"
+              classNameName="lg:max-w-[90%] w-full h-full object-contain block mx-auto"
               alt="login-image"
             />
           </div>
-          <div className="flex items-center md:p-8 p-6 bg-[#c2c2c2] h-full lg:w-11/12 lg:ml-auto">
-            <form className="max-w-lg w-full mx-auto" onSubmit={registerHandle}>
-              <div className="mb-12">
-                <h3 className="text-3xl font-bold text-gray-950">
+          <div classNameName="flex items-center md:p-8 p-6 bg-[#c2c2c2] h-full lg:w-11/12 lg:ml-auto">
+            <form classNameName="max-w-lg w-full mx-auto" onSubmit={registerHandle}>
+              <div classNameName="mb-12">
+                <h3 classNameName="text-3xl font-bold text-gray-950">
                   Create an account
                 </h3>
               </div>
               <div>
-                <label className="text-xs block mb-2">First Name</label>
-                <div className="relative flex items-center">
+                <label classNameName="text-xs block mb-2">First Name</label>
+                <div classNameName="relative flex items-center">
                   <input
                     name="firstName"
                     type="text"
                     required
-                    className="w-full bg-transparent text-sm border-b border-slate-950 focus:border-black px-2 py-3 outline-none"
+                    classNameName="w-full bg-transparent text-sm border-b border-slate-950 focus:border-black px-2 py-3 outline-none"
                     placeholder="Enter first name"
                     onChange={(e) => {
                       setFirst(e.target.value);
@@ -316,14 +317,14 @@ const Register = () => {
                   />
                 </div>
               </div>
-              <div className="mt-10">
-                <label className="text-xs block mb-2">Last Name</label>
-                <div className="relative flex items-center">
+              <div classNameName="mt-10">
+                <label classNameName="text-xs block mb-2">Last Name</label>
+                <div classNameName="relative flex items-center">
                   <input
                     name="lastName"
                     type="text"
                     required
-                    className="w-full bg-transparent text-sm border-b border-slate-950 focus:border-black px-2 py-3 outline-none"
+                    classNameName="w-full bg-transparent text-sm border-b border-slate-950 focus:border-black px-2 py-3 outline-none"
                     placeholder="Enter last name"
                     onChange={(e) => {
                       setLast(e.target.value);
@@ -331,14 +332,14 @@ const Register = () => {
                   />
                 </div>
               </div>
-              <div className="mt-10">
-                <label className="text-xs block mb-2">Email</label>
-                <div className="relative flex items-center">
+              <div classNameName="mt-10">
+                <label classNameName="text-xs block mb-2">Email</label>
+                <div classNameName="relative flex items-center">
                   <input
                     name="email"
                     type="email"
                     required
-                    className="w-full bg-transparent text-sm border-b border-neutral-950 focus:border-stone-950 px-2 py-3 outline-none"
+                    classNameName="w-full bg-transparent text-sm border-b border-neutral-950 focus:border-stone-950 px-2 py-3 outline-none"
                     placeholder="Enter email"
                     onChange={(e) => {
                       setEmail(e.target.value);
@@ -346,14 +347,14 @@ const Register = () => {
                   />
                 </div>
               </div>
-              <div className="mt-10">
-                <label className="text-xs block mb-2">Password</label>
-                <div className="relative flex items-center">
+              <div classNameName="mt-10">
+                <label classNameName="text-xs block mb-2">Password</label>
+                <div classNameName="relative flex items-center">
                   <input
                     name="password"
                     type="password"
                     required
-                    className="w-full bg-transparent text-sm border-b border-neutral-950 focus:border-stone-950 px-2 py-3 outline-none"
+                    classNameName="w-full bg-transparent text-sm border-b border-neutral-950 focus:border-stone-950 px-2 py-3 outline-none"
                     placeholder="Enter password"
                     onChange={(e) => {
                       setPassword(e.target.value);
@@ -361,14 +362,14 @@ const Register = () => {
                   />
                 </div>
               </div>
-              <div className="mt-10">
-                <label className="text-xs block mb-2">Age</label>
-                <div className="relative flex items-center">
+              <div classNameName="mt-10">
+                <label classNameName="text-xs block mb-2">Age</label>
+                <div classNameName="relative flex items-center">
                   <input
                     name="age"
                     type="number"
                     required
-                    className="w-full bg-transparent text-sm border-b border-slate-950 focus:border-black px-2 py-3 outline-none"
+                    classNameName="w-full bg-transparent text-sm border-b border-slate-950 focus:border-black px-2 py-3 outline-none"
                     placeholder="Enter birthday"
                     onChange={(e) => {
                       setAge(e.target.value);
@@ -376,13 +377,13 @@ const Register = () => {
                   />
                 </div>
               </div>
-              <div className="mt-10">
-                <label className="text-xs block mb-2">Role</label>
-                <div className="relative flex items-center">
+              <div classNameName="mt-10">
+                <label classNameName="text-xs block mb-2">Role</label>
+                <div classNameName="relative flex items-center">
                   <select
                     name="role"
                     required
-                    className="w-full bg-transparent text-sm border-b border-neutral-950 focus:border-stone-950 px-2 py-3 outline-none"
+                    classNameName="w-full bg-transparent text-sm border-b border-neutral-950 focus:border-stone-950 px-2 py-3 outline-none"
                     onChange={(e) => {
                       setUserType(e.target.value);
                     }}
@@ -390,22 +391,22 @@ const Register = () => {
                     <option value="" disabled selected>
                       Select your role
                     </option>
-                    <option value="teacher" className="bg-indigo-400" required>
+                    <option value="teacher" classNameName="bg-indigo-400" required>
                       Teacher
                     </option>
-                    <option value="student" className="bg-indigo-400" required>
+                    <option value="student" classNameName="bg-indigo-400" required>
                       Student
                     </option>
                   </select>
                 </div>
               </div>
-              <div className="mt-10">
-                <label className="text-xs block mb-2">Country</label>
-                <div className="relative flex items-center">
+              <div classNameName="mt-10">
+                <label classNameName="text-xs block mb-2">Country</label>
+                <div classNameName="relative flex items-center">
                   <select
                     name="country"
                     required
-                    className="w-full bg-transparent text-sm border-b border-neutral-950 focus:border-stone-950 px-2 py-3 outline-none"
+                    classNameName="w-full bg-transparent text-sm border-b border-neutral-950 focus:border-stone-950 px-2 py-3 outline-none"
                     onChange={(e) => {
                       setCountry(e.target.value);
                     }}
@@ -414,7 +415,7 @@ const Register = () => {
                       Select your country
                     </option>
                     {countryArray.map((elem, ind) => (
-                      <option key={ind} value={elem} className="bg-indigo-400">
+                      <option key={ind} value={elem} classNameName="bg-indigo-400">
                         {elem}
                       </option>
                     ))}
@@ -422,26 +423,26 @@ const Register = () => {
                 </div>
               </div>
               {error && (
-                <div className="mt-10 flex items-start">
-                  <p className="text-red-500 text-sm">{error}</p>
+                <div classNameName="mt-10 flex items-start">
+                  <p classNameName="text-red-500 text-sm">{error}</p>
                 </div>
               )}
-              <div className="mt-10">
+              <div classNameName="mt-10">
                 <Link to="/login">
                   {" "}
                   <button
                     type="submit"
-                    className="w-max shadow-xl py-2.5 px-8 text-sm font-semibold rounded-md bg-transparent text-stone-950 border-stone-950 focus:outline-none"
+                    classNameName="w-max shadow-xl py-2.5 px-8 text-sm font-semibold rounded-md bg-transparent text-stone-950 border-stone-950 focus:outline-none"
                   >
                     Register
                   </button>
                 </Link>
-                <p className="text-sm mt-8">
+                <p classNameName="text-sm mt-8">
                   Already have an account?{" "}
                   <Link to="/login">
                     <a
                       href="javascript:void(0);"
-                      className="text-stone-950 font-semibold hover:underline ml-1"
+                      classNameName="text-stone-950 font-semibold hover:underline ml-1"
                     >
                       Login here
                     </a>

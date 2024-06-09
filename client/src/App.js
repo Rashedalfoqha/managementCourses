@@ -1,9 +1,12 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import Login from "../src/components/Login/Login";
-import Register from "./components/Register/Register";
+import Login from "./components/login/Login";
+import Register from "./components/register/Register";
 import { createContext, useState } from "react";
-import Home from "./components/Home/Home";
+import Home from "./components/home/Home";
+import AddCourses from "./components/addCourses/AddCourses";
+import Courses from "./components/courses/Courses";
+import Nav from "./components/navbar/Nav";
 
 export const userContext = createContext();
 function App() {
@@ -11,15 +14,19 @@ function App() {
   const [userId, setUserId] = useState(localStorage.getItem("userId"));
   const [role, setRole] = useState(localStorage.getItem("role"));
   const [isLoggedIn, setIsLoggedIn] = useState(!!token);
-
   return (
     <>
-      <userContext.Provider value={(token, userId, isLoggedIn)}>
+      <userContext.Provider value={{ token, userId, isLoggedIn, role }}>
+        <Nav />{" "}
         <Routes>
           {" "}
           <Route path="/" element={isLoggedIn && <Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route
+            path="/courses"
+            element={role === 1 ? <AddCourses /> : <Courses />}
+          />
         </Routes>
       </userContext.Provider>
     </>
