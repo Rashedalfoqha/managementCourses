@@ -1,7 +1,34 @@
-import React from "react";
-import { Link } from "react-router-dom";
-
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { userContext } from "../../App";
 const Login = () => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { setToken, token, userId, setUserId } = useContext(userContext);
+  const loginHandle = () => {
+    axios
+      .post("http://localhost:5000/users/login", {
+        email: email,
+        password: password
+      })
+      .then((result) => {
+        const token = result.data.token;
+        const roleId = result.data.role_id;
+        const userId = result.data.userId;
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("role", roleId);
+
+        localStorage.setItem("userId", userId);
+        console.log(result);
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
       <div className="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
@@ -65,11 +92,17 @@ const Login = () => {
                   className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                   type="email"
                   placeholder="Email"
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
                 />
                 <input
                   className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
                   type="password"
                   placeholder="Password"
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
                 />
                 <button className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
                   <svg
@@ -85,7 +118,14 @@ const Login = () => {
                     <circle cx="8.5" cy="7" r="4" />
                     <path d="M20 8v6M23 11h-6" />
                   </svg>
-                  <span className="ml-3">Sign in</span>
+                  <span
+                    className="ml-3"
+                    onClick={() => {
+                      loginHandle();
+                    }}
+                  >
+                    Sign in
+                  </span>
                 </button>
                 <p className="mt-6 text-xs text-gray-600 text-center">
                   You don't have an account{" "}
