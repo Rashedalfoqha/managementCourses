@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import axios from "axios";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const [first, setFirst] = useState("");
@@ -8,6 +10,7 @@ const Register = () => {
   const [age, setAge] = useState("");
   const [userType, setUserType] = useState("");
   const [country, setCountry] = useState("");
+  const [error, setError] = useState(null);
 
   const countryArray = [
     "United States",
@@ -113,7 +116,6 @@ const Register = () => {
     "Iran (Islamic Republic of)",
     "Iraq",
     "Ireland",
-    "Israel",
     "Italy",
     "Ivory Coast",
     "Jamaica",
@@ -252,9 +254,35 @@ const Register = () => {
     "Zambia",
     "Zimbabwe"
   ];
-  const registerHandle=()=>{
-    
-  }
+  const registerHandle = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/users/register",
+        {
+          photo: null,
+          cover: null,
+          firstName: first,
+          lastName: last,
+          email: email,
+          age: age,
+          country: country,
+          password: password,
+          user_type: userType
+        }
+      );
+
+      console.log(response.data);
+    } catch (err) {
+      console.log(err);
+      if (err.response.status === 409) {
+        setError("The email address is already in use.");
+      } else {
+        setError("Registration failed. Please try again later.");
+      }
+    }
+  };
   return (
     <>
       <div className="font-[sans-serif] bg-white text-white md:h-screen">
@@ -267,7 +295,7 @@ const Register = () => {
             />
           </div>
           <div className="flex items-center md:p-8 p-6 bg-[#c2c2c2] h-full lg:w-11/12 lg:ml-auto">
-            <form className="max-w-lg w-full mx-auto">
+            <form className="max-w-lg w-full mx-auto" onSubmit={registerHandle}>
               <div className="mb-12">
                 <h3 className="text-3xl font-bold text-gray-950">
                   Create an account
@@ -327,6 +355,9 @@ const Register = () => {
                     required
                     className="w-full bg-transparent text-sm border-b border-neutral-950 focus:border-stone-950 px-2 py-3 outline-none"
                     placeholder="Enter password"
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
                   />
                 </div>
               </div>
@@ -334,8 +365,8 @@ const Register = () => {
                 <label className="text-xs block mb-2">Age</label>
                 <div className="relative flex items-center">
                   <input
-                    name="lastName"
-                    type="date"
+                    name="age"
+                    type="number"
                     required
                     className="w-full bg-transparent text-sm border-b border-slate-950 focus:border-black px-2 py-3 outline-none"
                     placeholder="Enter birthday"
@@ -359,10 +390,10 @@ const Register = () => {
                     <option value="" disabled selected>
                       Select your role
                     </option>
-                    <option value="teacher" className="bg-indigo-400">
+                    <option value="teacher" className="bg-indigo-400" required>
                       Teacher
                     </option>
-                    <option value="student" className="bg-indigo-400">
+                    <option value="student" className="bg-indigo-400" required>
                       Student
                     </option>
                   </select>
@@ -379,27 +410,23 @@ const Register = () => {
                       setCountry(e.target.value);
                     }}
                   >
-                    <option value="" disabled selected>
+                    <option disabled selected>
                       Select your country
                     </option>
-                    {countryArray.map((elem, ind) => {
-                      return (
-                        <>
-                          <option
-                            key={ind}
-                            value={elem}
-                            className="bg-indigo-400"
-                          >
-                            {elem}
-                          </option>
-                        </>
-                      );
-                    })}
+                    {countryArray.map((elem, ind) => (
+                      <option key={ind} value={elem} className="bg-indigo-400">
+                        {elem}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
-              <div className="mt-10 flex items-start"></div>
-              <div className="mt-0">
+              {error && (
+                <div className="mt-10 flex items-start">
+                  <p className="text-red-500 text-sm">{error}</p>
+                </div>
+              )}
+              <div className="mt-10">
                 <button
                   type="submit"
                   className="w-max shadow-xl py-2.5 px-8 text-sm font-semibold rounded-md bg-transparent text-stone-950 border-stone-950 focus:outline-none"
@@ -408,12 +435,14 @@ const Register = () => {
                 </button>
                 <p className="text-sm mt-8">
                   Already have an account?{" "}
-                  <a
-                    href="javascript:void(0);"
-                    className="text-stone-950 font-semibold hover:underline ml-1"
-                  >
-                    Login here
-                  </a>
+                  <Link to="/login">
+                    <a
+                      href="javascript:void(0);"
+                      className="text-stone-950 font-semibold hover:underline ml-1"
+                    >
+                      Login here
+                    </a>
+                  </Link>
                 </p>
               </div>
             </form>

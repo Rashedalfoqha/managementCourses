@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Login from "../src/components/Login/Login";
+import Register from "./components/Register/Register";
 import { createContext, useState } from "react";
 
 export const userContext = createContext();
@@ -13,7 +14,7 @@ const [userId, setUserId] = useState("")
         <Routes>
           {" "}
           <Route path="/login" element={<Login />} />
-          
+          <Route path="/register" element={<Register />} />
         </Routes>
       </userContext.Provider>
     </>

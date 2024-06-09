@@ -8,8 +8,8 @@ const cors = require("cors");
 app.use(cors());
 const usersRouter = require("./routes/users");
 const coursesRouter = require("./routes/courses");
-const favRouter = require("./routes/fav");
-app.use("/fav", favRouter);
+const favoritesRouter = require("./routes/favorites");
+app.use("/fav", favoritesRouter);
 app.use("/users", usersRouter);
 app.use("/courses", coursesRouter);
 

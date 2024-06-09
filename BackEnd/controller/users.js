@@ -47,8 +47,8 @@ const register = async (req, res) => {
 
   const values = [
     role_id,
-    photo,
-    cover,
+    photo || null,
+    cover || null,
     firstName,
     lastName,
     email.toLowerCase(),
@@ -100,7 +100,8 @@ const login = (req, res) => {
                 token,
                 success: true,
                 message: `Valid login credentials`,
-                userId: result.rows[0].id
+                userId: result.rows[0].id,
+                role_id: result.rows[0].role_id
               });
             } else {
               throw Error;
