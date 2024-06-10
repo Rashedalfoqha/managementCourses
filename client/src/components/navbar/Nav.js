@@ -52,13 +52,13 @@ const Nav = () => {
                   className="block h-6 w-6"
                   fill="none"
                   viewBox="0 0 24 24"
-                  stroke-width="1.5"
+                  strokeWidth="1.5"
                   stroke="currentColor"
                   aria-hidden="true"
                 >
                   <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
                   />
                 </svg>
@@ -67,13 +67,13 @@ const Nav = () => {
                   className="hidden h-6 w-6"
                   fill="none"
                   viewBox="0 0 24 24"
-                  stroke-width="1.5"
+                  strokeWidth="1.5"
                   stroke="currentColor"
                   aria-hidden="true"
                 >
                   <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
@@ -81,11 +81,13 @@ const Nav = () => {
             </div>
             <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
               <div className="flex flex-shrink-0 items-center">
-                <img
-                  className="h-8 w-auto"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                  alt="Your Company"
-                />
+                <Link to="/">
+                  <img
+                    className="h-8 w-auto"
+                    src={"https://i.ibb.co/BHJ4MRh/Untitled-1.png"}
+                    alt="Your Company"
+                  />
+                </Link>
               </div>
               <div className="hidden sm:ml-6 sm:block">
                 <div className="flex space-x-4">
@@ -100,7 +102,11 @@ const Nav = () => {
                     href="#"
                     className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                   >
-                    <Link to="/fav">My Courses</Link>
+                    {role == 1 ? (
+                      <Link to="/fav">My Courses</Link>
+                    ) : (
+                      <Link to="/teacher">teacher</Link>
+                    )}
                   </a>
 
                   {role == 1 && (
@@ -134,10 +140,10 @@ const Nav = () => {
                           <img
                             className="h-8 w-8 rounded-full"
                             src={
-                              userInfo?.photo ||
-                              "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                              userInfo?.image ||
+                              "https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                             }
-                            alt=""
+                            alt="User Profile"
                           />
                         </button>
                       </div>

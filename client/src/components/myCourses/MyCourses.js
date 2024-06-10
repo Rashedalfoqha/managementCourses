@@ -17,8 +17,7 @@ const Myfav = () => {
         }
       })
       .then(() => {
-        console.log("deleted");
-        setFavorites((prev) => ({ ...prev, [id]: false }));
+        console.log("deleted", id);
       })
       .catch((err) => {
         console.log(err);
@@ -27,7 +26,7 @@ const Myfav = () => {
 
   const myFav = () => {
     axios
-      .get("http://localhost:5000/fav", {
+      .get("http://localhost:5000/courses/users/cour", {
         headers: {
           authorization: `Bearer ${token}`
         }
@@ -60,28 +59,14 @@ const Myfav = () => {
           </div>
         ) : (
           <div className="sm:grid lg:grid-cols-3 sm:grid-cols-2 gap-10">
-            {fav.map((course) => (
+            {fav.map((course, index) => (
               <div
-                key={course.id} // Use a unique identifier like course.id
+                key={index}
                 className="hover:bg-gray-900 hover:text-white transition duration-300 max-w-sm rounded overflow-hidden shadow-lg"
-                onClick={() => {
-                  console.log(course.id);
-                }}
               >
                 <div className="py-4 px-8">
-                  <Link to={`/user/${course.user_id}`}>
-                    {" "}
-                    <img
-                      src={
-                        course.image ||
-                        "https://tailwindcss.com/img/jonathan.jpg"
-                      }
-                      className="rounded-full h-12 w-12 mb-4"
-                      alt={course.image}
-                    />
-                  </Link>
+                  
                   <Link to={`/deatils/${course.id}`}>
-                    {" "}
                     <a href="#">
                       <h4 className="text-lg mb-3 font-semibold">
                         {course.title}
@@ -93,21 +78,28 @@ const Myfav = () => {
                   </p>
                   <img
                     src={
-                      course.photo ||
-                      "https://images.pexels.com/photos/461077/pexels-photo-461077.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                      course.photo
+                        ? course.photo
+                        : "https://images.pexels.com/photos/461077/pexels-photo-461077.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
                     }
                     className="w-100"
                     alt={course.title}
                   />
+                  <div className="flex justify-between mt-4">
+                    <button
+                      className="text-red-500 hover:text-red-700 mr-4"
+                      onClick={() => deleteFav(course.id)}
+                    >
+                      Delete
+                    </button>
+                    <Link
+                      to={`/edit/${course.id}`}
+                      className="text-blue-500 hover:text-blue-700"
+                    >
+                      Edit
+                    </Link>
+                  </div>
                   <hr className="mt-4" />
-                </div>
-                <div className="flex">
-                  <button
-                    onClick={() => deleteFav(course.id)}
-                    className="text-red-500"
-                  >
-                    Unfavorite
-                  </button>
                 </div>
               </div>
             ))}

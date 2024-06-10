@@ -24,6 +24,7 @@ const createCourses = (req, res) => {
     });
 };
 const getAllCoursesByUserId = (req, res) => {
+  // const userId = req.token.userId;
   const user_id = req.token.userId;
   const query = `SELECT * FROM courses WHERE user_id=$1`;
   const value = [user_id];
@@ -82,6 +83,7 @@ const getAllCourses = (req, res) => {
   users.email,
   users.age,
   users.country
+  ,users.image
   FROM courses, users
   WHERE courses.is_deleted = 0
   ORDER BY courses.created_at;`;

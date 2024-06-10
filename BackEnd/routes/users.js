@@ -4,7 +4,8 @@ const {
   login,
   getUserInfoById,
   updateData,
-  getUserById
+  getUserById,
+  allUsers
 } = require("../controller/users");
 const usersRouter = express.Router();
 const authentication = require("../middleware/authentication");
@@ -13,5 +14,6 @@ usersRouter.post("/login", login);
 usersRouter.get("/", authentication, getUserInfoById);
 usersRouter.put("/update", authentication, updateData);
 usersRouter.get("/:id", getUserById);
+usersRouter.get("/teacher", allUsers);
 
 module.exports = usersRouter;

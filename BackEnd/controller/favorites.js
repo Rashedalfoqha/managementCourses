@@ -5,7 +5,7 @@ const fav = (req, res) => {
   FROM users_favorites
   JOIN users ON users_favorites.user_id = users.id
   JOIN courses ON users_favorites.course_id = courses.id
-  WHERE users_favorites.user_id = $1`;
+  WHERE users_favorites.user_id = $1 AND users_favorites.id`;
   const value = [user_id];
   pool
     .query(query, value)
@@ -53,7 +53,13 @@ const deleteFavorites = (req, res) => {
   const values = [id];
   pool
     .query(query, values)
-    .then(() => {
+    .then((result) => {
+      if (result.rowCount === 0) {
+        return res.status(404).json({
+          success: false,
+          message: "Favorite course not found"
+        });
+      }
       res.status(200).json({
         success: true,
         message: "Favorite course deleted successfully"

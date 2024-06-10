@@ -194,10 +194,25 @@ const getUserById = (req, res) => {
       console.log(err);
     });
 };
+const allUsers = () => {
+  const query = `SELECT * FROM users WHERE role_id=1`;
+  pool
+    .query(query)
+    .then((result) => {
+      res.status(200).json({
+        message: "teacher users",
+        result: result.rows
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 module.exports = {
   register,
   login,
   getUserInfoById,
   updateData,
-  getUserById
+  getUserById,
+  allUsers
 };

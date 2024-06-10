@@ -489,12 +489,13 @@ const PersonalPage = () => {
                 <div className="py-4 px-8">
                   <img
                     src={
-                      course.instructorImage ||
-                      "https://tailwindcss.com/img/jonathan.jpg"
+                      userInfo.image ||
+                      "https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                     }
                     className="rounded-full h-12 w-12 mb-4"
-                    alt={course.instructorName}
+                    alt="User Profile"
                   />
+                 
                   <a href="#">
                     <h4 className="text-lg mb-3 font-semibold">
                       {course.title}
