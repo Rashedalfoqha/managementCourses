@@ -3,17 +3,44 @@ import { userContext } from "../../App";
 import { storage } from "../../FireBase";
 import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
+import axios from "axios";
 
 const AddCourses = () => {
-  const { role, userId } = useContext(userContext);
-  console.log(role);
-
+  const { role, userId, token } = useContext(userContext);
+  const createCourses = (e) => {
+    e.preventDefault();
+    axios
+      .post(
+        "http://localhost:5000/courses/create",
+        {
+          photo: imageUrl,
+          video: videoUrl,
+          title: title,
+          description: description,
+          user_id: userId
+        },
+        {
+          headers: {
+            authorization: `Bearer ${token}`
+          }
+        }
+      )
+      .then((result) => {
+        console.log(result);
+        navigate(`/${result.data.result.id}`);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const [imageUrl, setImageUrl] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
   const [imageUpload, setImageUpload] = useState(null);
   const [videoUpload, setVideoUpload] = useState(null);
   const [imageList, setImageList] = useState([]);
   const [videoList, setVideoList] = useState([]);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
   const imageListRef = ref(storage, `images/`);
   const videoListRef = ref(storage, `videos/`);
@@ -67,7 +94,7 @@ const AddCourses = () => {
   }, []);
 
   return (
-    <form className="p-16">
+    <form className="p-16" onSubmit={createCourses}>
       <div className="mb-6">
         <label
           htmlFor="title"
@@ -81,6 +108,9 @@ const AddCourses = () => {
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Title"
           required
+          onChange={(e) => {
+            setTitle(e.target.value);
+          }}
         />
       </div>
       <div className="mb-6">
@@ -96,6 +126,9 @@ const AddCourses = () => {
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Description ..."
           required
+          onChange={(e) => {
+            setDescription(e.target.value);
+          }}
         />
       </div>
 

@@ -6,21 +6,22 @@ const createCourses = (req, res) => {
     VALUES ($1, $2, $3, $4,$5)
     RETURNING *;`;
   const value = [photo, video, title, description, user_id];
-  pool.query(query, value).then((result) => {
-    res
-      .status(201)
-      .json({
-        message: "created new course successfully",
+
+  pool
+    .query(query, value)
+    .then((result) => {
+      res.status(201).json({
+        message: "Created new course successfully",
         result: result.rows[0]
-      })
-      .catch((err) => {
-        res.status(500).json({
-          success: false,
-          message: "Server error",
-          error: err.message
-        });
       });
-  });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+        error: err.message
+      });
+    });
 };
 const getAllCoursesByUserId = (req, res) => {
   const user_id = req.token.userId;
