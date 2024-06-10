@@ -65,7 +65,6 @@ const Myfav = () => {
                 className="hover:bg-gray-900 hover:text-white transition duration-300 max-w-sm rounded overflow-hidden shadow-lg"
               >
                 <div className="py-4 px-8">
-                  
                   <Link to={`/deatils/${course.id}`}>
                     <a href="#">
                       <h4 className="text-lg mb-3 font-semibold">
@@ -85,20 +84,7 @@ const Myfav = () => {
                     className="w-100"
                     alt={course.title}
                   />
-                  <div className="flex justify-between mt-4">
-                    <button
-                      className="text-red-500 hover:text-red-700 mr-4"
-                      onClick={() => deleteFav(course.id)}
-                    >
-                      Delete
-                    </button>
-                    <Link
-                      to={`/edit/${course.id}`}
-                      className="text-blue-500 hover:text-blue-700"
-                    >
-                      Edit
-                    </Link>
-                  </div>
+
                   <hr className="mt-4" />
                 </div>
               </div>

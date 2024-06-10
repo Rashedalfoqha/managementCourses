@@ -105,17 +105,24 @@ const getAllCourses = (req, res) => {
 };
 const updateCourses = (req, res) => {
   const { photo, video, title, description } = req.body;
+  const { id } = req.params;
   const query = ` UPDATE courses 
   SET 
-    photo = COALESCE($1, photo),
-    video = COALESCE($2, video),
-    title = COALESCE($3, title),
-    description = COALESCE($4, description),
+      photo = COALESCE($1, photo),
+      video = COALESCE($2, video),
+      title = COALESCE($3, title),
+      description = COALESCE($4, description)
   WHERE 
-    id = $5 
-    AND is_deleted = 0 
-  RETURNING *`;
-  const value = [photo, video, title, description];
+      id = $5 
+      AND is_deleted = 0 
+  RETURNING *;`;
+  const value = [
+    photo || null,
+    video || null,
+    title || null,
+    description || null,
+    id
+  ];
   pool
     .query(query, value)
     .then((result) => {
