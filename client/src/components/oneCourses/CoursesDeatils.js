@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { userContext } from "../../App";
 import { storage } from "../../FireBase";
 import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
@@ -8,12 +8,14 @@ import { v4 } from "uuid";
 import "./index.css";
 
 const CoursesDetails = () => {
+  const navigate = useNavigate();
   const { token, userId } = useContext(userContext);
   const { id } = useParams();
   const [coursesInfo, setCoursesInfo] = useState({});
   const [isFavorite, setIsFavorite] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenUpdate, setIsModalOpenUpdate] = useState(false);
+  const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
 
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [photo, setPhoto] = useState("");
@@ -81,6 +83,31 @@ const CoursesDetails = () => {
 
   const closeModalUpdate = () => {
     setIsModalOpenUpdate(false);
+  };
+  const openDelete = () => {
+    setIsModalOpenDelete(true);
+  };
+
+  const closeModalDelete = () => {
+    setIsModalOpenDelete(false);
+  };
+  const deleteCourses = (e) => {
+    e.preventDefault();
+
+    axios
+      .delete(`http://localhost:5000/courses/delete/${coursesInfo.id}`, {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      })
+      .then((result) => {
+        closeModalDelete();
+        navigate("/fav");
+        console.log(result.data.result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   const updateData = (e) => {
     e.preventDefault();
@@ -239,6 +266,48 @@ const CoursesDetails = () => {
                     type="button"
                     className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:w-auto sm:text-sm"
                     onClick={closeModal}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {isModalOpenDelete && (
+          <div className="fixed z-10 inset-0 overflow-y-auto">
+            <div className="flex items-center justify-center min-h-screen text-center">
+              <div
+                className="fixed inset-0 transition-opacity"
+                aria-hidden="true"
+              >
+                <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+              </div>
+              <span
+                className="hidden sm:inline-block sm:align-middle sm:h-screen"
+                aria-hidden="true"
+              >
+                &#8203;
+              </span>
+              <div className="inline-block align-bottom bg-white text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-full sm:w-full">
+                <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                  <div className="w-full h-80 flex flex-col justify-center items-center relative">
+                    <h1 className="text-center align-middle text-5xl">
+                      are you sure delete course ?
+                    </h1>
+                    <button
+                      onClick={deleteCourses}
+                      className="mt-8 py-3 px-4 inline-flex items-center justify-center text-sm font-semibold rounded-lg border border-transparent bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 disabled:pointer-events-none"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+                <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                  <button
+                    type="button"
+                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:w-auto sm:text-sm"
+                    onClick={closeModalDelete}
                   >
                     Cancel
                   </button>
@@ -442,8 +511,8 @@ const CoursesDetails = () => {
                 <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                   <button
                     type="button"
-                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:w-auto sm:text-sm"
-                    onClick={closeModal}
+                    className="mt-3  w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:w-auto sm:text-sm"
+                    onClick={closeModalUpdate}
                   >
                     Cancel
                   </button>
@@ -516,12 +585,14 @@ const CoursesDetails = () => {
                 update
               </button>
             )}
-            <button
-              onClick={openModal}
-              className="py-3 px-4 inline-flex items-center text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-red-700 disabled:opacity-50 disabled:pointer-events-none"
-            >
-              delete{" "}
-            </button>
+            {coursesInfo.user_id == userId && (
+              <button
+                onClick={openDelete}
+                className="py-3 px-4 inline-flex items-center text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-red-700 disabled:opacity-50 disabled:pointer-events-none"
+              >
+                delete
+              </button>
+            )}
           </div>
         </div>
       </div>

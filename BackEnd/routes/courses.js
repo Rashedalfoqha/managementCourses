@@ -26,9 +26,9 @@ coursesRouter.put(
   updateCourses
 );
 coursesRouter.delete(
-  "/delete",
+  "/delete/:id",
   authentication,
-  authorization("DELETE_COURSES"),
+
   softDeletedcourses
 );
 coursesRouter.get("/:id", getCoursesById);

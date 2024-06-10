@@ -34,7 +34,7 @@ function App() {
           <Route path="/personal" element={<PersonalPage />} />
           <Route path="/newcourses" element={<AddCourses />} />
           <Route path="/deatils/:id" element={<CoursesDeatils />} />
-          <Route path="fav" element={<Myfav />} />
+          <Route path="/fav" element={<Myfav />} />
           <Route path="/user/:id" element={<User/>}/>
         </Routes>
       </userContext.Provider>
