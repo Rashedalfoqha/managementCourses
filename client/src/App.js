@@ -11,6 +11,7 @@ import PersonalPage from "./components/personalPage/PersonalPage";
 import CoursesDeatils from "./components/oneCourses/CoursesDeatils";
 import Myfav from "./components/myCourses/MyCourses";
 import User from "./components/user/User";
+import Teacher from "./components/teacher/Teacher";
 
 export const userContext = createContext();
 function App() {
@@ -35,7 +36,8 @@ function App() {
           <Route path="/newcourses" element={<AddCourses />} />
           <Route path="/deatils/:id" element={<CoursesDeatils />} />
           <Route path="/fav" element={<Myfav />} />
-          <Route path="/user/:id" element={<User/>}/>
+          <Route path="/user/:id" element={<User />} />
+          <Route path="/teacher" element={<Teacher />} />
         </Routes>
       </userContext.Provider>
     </>

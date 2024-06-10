@@ -194,8 +194,8 @@ const getUserById = (req, res) => {
       console.log(err);
     });
 };
-const allUsers = () => {
-  const query = `SELECT * FROM users WHERE role_id=1`;
+const allUsers = (req, res) => {
+  const query = `SELECT * FROM users WHERE role_id = 1`;
   pool
     .query(query)
     .then((result) => {
@@ -205,7 +205,7 @@ const allUsers = () => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      console.log(err.message);
     });
 };
 module.exports = {

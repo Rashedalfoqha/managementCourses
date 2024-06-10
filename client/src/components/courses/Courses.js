@@ -65,17 +65,17 @@ const Courses = () => {
 
   useEffect(() => {
     const createCourses = () => {
-    axios
-      .get("http://localhost:5000/courses/all")
-      .then((result) => {
-        setCourses(result.data.result);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-      });
-  };
+      axios
+        .get("http://localhost:5000/courses/all")
+        .then((result) => {
+          setCourses(result.data.result);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
+    };
 
     createCourses();
   }, []);
@@ -90,7 +90,6 @@ const Courses = () => {
             className="rounded-full h-28 w-28"
             alt="Loading"
           />
-          
         </div>
       ) : (
         <div className="sm:grid lg:grid-cols-3 sm:grid-cols-2 gap-10">
@@ -124,15 +123,20 @@ const Courses = () => {
                 </button>
               </Link>
               <div className="py-4 px-8">
-                <img
-                  src={
-                    course.image
-                      ? course.image
-                      : "https://images.unsplash.com/photo-1608889175123-8ee362201f81?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  }
-                  className="rounded-full h-12 w-12 mb-4"
-                  alt={course.image}
-                />
+                <Link to={`/user/${courses.user_id}`}>
+                  <div>
+                    <img
+                      src={
+                        course.image
+                          ? course.image
+                          : "https://images.unsplash.com/photo-1608889175123-8ee362201f81?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                      }
+                      className="rounded-full h-12 w-12 mb-4"
+                      alt={course.image}
+                    />
+                  </div>
+                </Link>
+
                 <a href="#">
                   <h4 className="text-lg mb-3 font-semibold">{course.title}</h4>
                 </a>
@@ -148,33 +152,7 @@ const Courses = () => {
                   alt={course.title}
                 />
                 <hr className="mt-4" />
-                <div className="flex">
-                  {/* <button
-                    className={`rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4 ${
-                      isFavorite ? "text-red-500" : ""
-                    }`}
-                    onClick={() => {
-                      if (isFavorite) {
-                        deleteFav(course.id);
-                        setIsFavorite(false);
-                      } else {
-                        addFav(course.id);
-                        setIsFavorite(true);
-                      }
-                    }}
-                  >
-                    <svg
-                      fill="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="w-5 h-5"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
-                    </svg>
-                  </button> */}
-                </div>
+                <div className="flex"></div>
               </div>
             </div>
           ))}

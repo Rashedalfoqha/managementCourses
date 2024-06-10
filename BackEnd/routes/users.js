@@ -14,6 +14,6 @@ usersRouter.post("/login", login);
 usersRouter.get("/", authentication, getUserInfoById);
 usersRouter.put("/update", authentication, updateData);
 usersRouter.get("/:id", getUserById);
-usersRouter.get("/teacher", allUsers);
+usersRouter.get("/teacher/all", allUsers);
 
 module.exports = usersRouter;

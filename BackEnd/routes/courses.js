@@ -34,3 +34,4 @@ coursesRouter.delete(
 coursesRouter.get("/:id", getCoursesById);
 coursesRouter.get("/users/cour", authentication, getAllCoursesByUserId);
 module.exports = coursesRouter;
+ 
