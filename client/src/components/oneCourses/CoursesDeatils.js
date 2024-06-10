@@ -11,8 +11,8 @@ const CoursesDetails = () => {
   const addFav = () => {
     axios
       .post(
-        "http://localhost:5000/fav/add",
-        { course_id: coursesInfo.id },
+        `http://localhost:5000/fav/add`,
+        { course_id: id },
         {
           headers: {
             authorization: `Bearer ${token}`
@@ -21,6 +21,7 @@ const CoursesDetails = () => {
       )
       .then((result) => {
         console.log("added to fav");
+        setIsFavorite(true); 
       })
       .catch((err) => {
         console.log(err);
@@ -39,6 +40,7 @@ const CoursesDetails = () => {
       )
       .then((result) => {
         console.log("deleted to fav");
+        setIsFavorite(false); 
       })
       .catch((err) => {
         console.log(err);
@@ -72,17 +74,17 @@ const CoursesDetails = () => {
           <img
             alt="ecommerce"
             className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
-            src={coursesInfo.photo || "https://dummyimage.com/400x400"}
+            src={coursesInfo?.photo || "https://dummyimage.com/400x400"}
           />
           <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
             <h2 className="text-sm title-font text-gray-500 tracking-widest">
-              {coursesInfo.firstname} {coursesInfo.lastname}
+              {coursesInfo?.firstname} {coursesInfo?.lastname}
             </h2>
             <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">
-              {coursesInfo.title}{" "}
+              {coursesInfo?.title}{" "}
             </h1>
 
-            <p className="leading-relaxed">{coursesInfo.description}</p>
+            <p className="leading-relaxed">{coursesInfo?.description}</p>
 
             <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
               <div className="flex">

@@ -1,7 +1,11 @@
 const { pool } = require("../models/db");
 const fav = (req, res) => {
   const user_id = req.token.userId;
-  const query = "SELECT * FROM users_favorites WHERE user_id=$1 ";
+  const query = `SELECT *
+  FROM users_favorites
+  JOIN users ON users_favorites.user_id = users.id
+  JOIN courses ON users_favorites.course_id = courses.id
+  WHERE users_favorites.user_id = $1`;
   const value = [user_id];
   pool
     .query(query, value)

@@ -9,6 +9,7 @@ import Courses from "./components/courses/Courses";
 import Nav from "./components/navbar/Nav";
 import PersonalPage from "./components/personalPage/PersonalPage";
 import CoursesDeatils from "./components/oneCourses/CoursesDeatils";
+import Myfav from "./components/myCourses/MyCourses";
 
 export const userContext = createContext();
 function App() {
@@ -32,6 +33,7 @@ function App() {
           <Route path="/personal" element={<PersonalPage />} />
           <Route path="/newcourses" element={<AddCourses />} />
           <Route path="/deatils/:id" element={<CoursesDeatils />} />
+          <Route path="fav" element={<Myfav />} />
         </Routes>
       </userContext.Provider>
     </>
