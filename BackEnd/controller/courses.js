@@ -157,15 +157,10 @@ const softDeletedcourses = (req, res) => {
 };
 const getCoursesById = (req, res) => {
   const { id } = req.params;
-  const query = `SELECT courses.*,
-    users.firstName, 
-    users.lastName,
-    users.email,
-    users.age,
-    users.country,
-    courses.photo
-    FROM courses, users
-    WHERE courses.id=$1 AND courses.user_id = users.id;`;
+  const query = `SELECT *
+  FROM courses, users
+  WHERE courses.id = $1
+    AND courses.user_id = users.id;`;
   const value = [id];
   pool
     .query(query, value)

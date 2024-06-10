@@ -45,11 +45,11 @@ const CoursesDetails = () => {
         console.log(err);
       });
   };
-  const detailsCourses = (id) => {
+  const detailsCourses = () => {
     axios
       .get(`http://localhost:5000/courses/${id}`)
       .then((result) => {
-        console.log(result.data.result[0]);
+        console.log(result.data.result);
         setCoursesInfo(result.data.result[0]);
       })
       .catch((err) => {
@@ -58,7 +58,7 @@ const CoursesDetails = () => {
   };
 
   useEffect(() => {
-    detailsCourses(id);
+    detailsCourses();
   }, []);
 
   return (

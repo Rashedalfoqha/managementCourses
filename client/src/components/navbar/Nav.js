@@ -24,7 +24,6 @@ const Nav = () => {
         }
       })
       .then((result) => {
-        console.log(result.data.result[0]);
         setUserInfo(result.data.result[0]);
       })
       .catch((err) => {

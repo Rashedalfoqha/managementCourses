@@ -27,31 +27,44 @@ const PersonalPage = () => {
 
   const imageListRef = ref(storage, `images/`);
   const coverListRef = ref(storage, `covers/`);
+
   const updateUserData = (e) => {
     e.preventDefault();
-    axios
-      .put(
-        "http://localhost:5000/users/update",
-        {
-          image: imageUrl,
-          cover: coverUrl,
-          firstName: firstName,
-          lastName: lastName,
-          country: country
-        },
-        {
-          headers: {
-            authorization: `Bearer ${token}`
+
+    const isDataModified =
+      firstName !== userInfo.firstname ||
+      lastName !== userInfo.lastname ||
+      country !== userInfo.country ||
+      imageUrl !== userInfo.image ||
+      coverUrl !== userInfo.cover;
+
+    if (isDataModified) {
+      axios
+        .put(
+          "http://localhost:5000/users/update",
+          {
+            image: imageUrl || userInfo.image,
+            cover: coverUrl || userInfo.cover,
+            firstName: firstName || userInfo.firstName,
+            lastName: lastName || userInfo.lastName,
+            country: country || userInfo.country
+          },
+          {
+            headers: {
+              authorization: `Bearer ${token}`
+            }
           }
-        }
-      )
-      .then((result) => {
-        console.log(result);
-        closeModal;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+        )
+        .then((result) => {
+          console.log(result);
+          closeModal();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      closeModal();
+    }
   };
   const handleFileChangeImage = (e) => {
     setImageUpload(e.target.files[0]);
