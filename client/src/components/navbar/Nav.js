@@ -95,7 +95,7 @@ const Nav = () => {
                     className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"
                     aria-current="page"
                   >
-                    Courses
+                    <Link to="/courses"> Courses</Link>
                   </a>
 
                   <a

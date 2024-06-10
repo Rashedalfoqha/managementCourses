@@ -1,4 +1,25 @@
 const { pool } = require("../models/db");
+const fav = (req, res) => {
+  const user_id = req.token.userId;
+  const query = "SELECT * FROM users_favorites WHERE user_id=$1 ";
+  const value = [user_id];
+  pool
+    .query(query, value)
+    .then((result) => {
+      res.status(201).json({
+        success: true,
+        message: "your favorites",
+        result: result.rows
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+        error: err.message
+      });
+    });
+};
 const addFavorites = (req, res) => {
   const user_id = req.token.userId;
   const { course_id } = req.body;
@@ -43,4 +64,4 @@ const deleteFavorites = (req, res) => {
     });
 };
 
-module.exports = { addFavorites, deleteFavorites };
+module.exports = { addFavorites, deleteFavorites, fav };

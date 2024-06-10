@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import Login from "./components/login/Login";
-import Register from "./components/register/Register";
+import Login from "./components/Login/Login";
+import Register from "./components/Register/Register";
 import { createContext, useState } from "react";
-import Home from "./components/home/Home";
+import Home from "./components/Home/Home";
 import AddCourses from "./components/addCourses/AddCourses";
 import Courses from "./components/courses/Courses";
 import Nav from "./components/navbar/Nav";
