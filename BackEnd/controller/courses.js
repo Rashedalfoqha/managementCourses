@@ -26,7 +26,8 @@ const createCourses = (req, res) => {
 const getAllCoursesByUserId = (req, res) => {
   // const userId = req.token.userId;
   const user_id = req.token.userId;
-  const query = `SELECT * FROM courses WHERE user_id=$1`;
+  const query = `SELECT * FROM courses WHERE user_id = $1 AND is_deleted = 0;
+  `;
   const value = [user_id];
   pool
     .query(query, value)
