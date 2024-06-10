@@ -4,8 +4,10 @@ import { storage } from "../../FireBase";
 import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const AddCourses = () => {
+  const navigate = useNavigate();
   const { role, userId, token } = useContext(userContext);
   const createCourses = (e) => {
     e.preventDefault();
@@ -27,7 +29,7 @@ const AddCourses = () => {
       )
       .then((result) => {
         console.log(result);
-        navigate(`/${result.data.result.id}`);
+        navigate(`/deatils/${result.data.result.id}`);
       })
       .catch((err) => {
         console.log(err);

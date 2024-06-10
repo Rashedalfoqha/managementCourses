@@ -155,11 +155,41 @@ const softDeletedcourses = (req, res) => {
       });
     });
 };
+const getCoursesById = (req, res) => {
+  const { id } = req.params;
+  const query = `SELECT courses.*,
+    users.firstName, 
+    users.lastName,
+    users.email,
+    users.age,
+    users.country,
+    courses.photo
+    FROM courses, users
+    WHERE courses.id=$1 AND courses.user_id = users.id;`;
+  const value = [id];
+  pool
+    .query(query, value)
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        message: "Courses data  successfully",
+        result: result.rows
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+        error: err.message
+      });
+    });
+};
 module.exports = {
   updateCourses,
   getAllCoursesForUser,
   getAllCourses,
   createCourses,
   softDeletedcourses,
-  getAllCoursesByUserId
+  getAllCoursesByUserId,
+  getCoursesById
 };
