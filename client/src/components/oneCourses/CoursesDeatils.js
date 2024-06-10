@@ -8,7 +8,7 @@ const CoursesDetails = () => {
   const { id } = useParams();
   const [coursesInfo, setCoursesInfo] = useState({});
   const [isFavorite, setIsFavorite] = useState(false);
-  const addFav = () => {
+  const addFav = (id) => {
     axios
       .post(
         `http://localhost:5000/fav/add`,
@@ -20,18 +20,18 @@ const CoursesDetails = () => {
         }
       )
       .then((result) => {
-        console.log("added to fav");
-        setIsFavorite(true); 
+        console.log("added course with ID:", id);
+        setIsFavorite(true);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  const deleteFav = () => {
+  const deleteFav = (id) => {
     axios
       .delete(
         `http://localhost:5000/fav/delete/${id}`,
-        { course_id: coursesInfo.id },
+        { course_id: id },
         {
           headers: {
             authorization: `Bearer ${token}`
@@ -39,14 +39,13 @@ const CoursesDetails = () => {
         }
       )
       .then((result) => {
-        console.log("deleted to fav");
-        setIsFavorite(false); 
+        console.log("Deleting course with ID:", id);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  const detailsCourses = () => {
+  const detailsCourses = (id) => {
     axios
       .get(`http://localhost:5000/courses/${id}`)
       .then((result) => {
@@ -59,7 +58,7 @@ const CoursesDetails = () => {
   };
 
   useEffect(() => {
-    detailsCourses();
+    detailsCourses(id);
   }, []);
 
   return (
@@ -94,10 +93,10 @@ const CoursesDetails = () => {
                   }`}
                   onClick={() => {
                     if (isFavorite) {
-                      deleteFav();
+                      deleteFav(id);
                       setIsFavorite(false);
                     } else {
-                      addFav();
+                      addFav(id);
                       setIsFavorite(true);
                     }
                   }}
