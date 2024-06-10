@@ -29,6 +29,7 @@ function App() {
             element={role === 1 ? <AddCourses /> : <Courses />}
           />
           <Route path="/personal" element={<PersonalPage />} />
+          <Route path="/newcourses" element={<AddCourses />} />
         </Routes>
       </userContext.Provider>
     </>

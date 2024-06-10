@@ -5,7 +5,8 @@ const {
   getAllCoursesForUser,
   getAllCourses,
   updateCourses,
-  softDeletedcourses
+  softDeletedcourses,
+  getAllCoursesByUserId
 } = require("../controller/courses");
 const authentication = require("../middleware/authentication");
 const authorization = require("../middleware/authorization");
@@ -29,4 +30,5 @@ coursesRouter.delete(
   authorization("DELETE_COURSES"),
   softDeletedcourses
 );
+coursesRouter.get("/user", authentication, getAllCoursesByUserId);
 module.exports = coursesRouter;

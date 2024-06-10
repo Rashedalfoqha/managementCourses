@@ -22,7 +22,26 @@ const createCourses = (req, res) => {
       });
   });
 };
-
+const getAllCoursesByUserId = (req, res) => {
+  const user_id = req.token.userId;
+  const query = `SELECT * FROM courses WHERE user_id=$1`;
+  const value = [user_id];
+  pool
+    .query(query, value)
+    .then((result) => {
+      res.status(200).json({
+        message: "all courses",
+        result: result.rows
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+        error: err.message
+      });
+    });
+};
 const getAllCoursesForUser = (req, res) => {
   const query = `SELECT 
   courses.*,
@@ -140,5 +159,6 @@ module.exports = {
   getAllCoursesForUser,
   getAllCourses,
   createCourses,
-  softDeletedcourses
+  softDeletedcourses,
+  getAllCoursesByUserId
 };

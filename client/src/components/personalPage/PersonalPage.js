@@ -3,6 +3,9 @@ import { userContext } from "../../App";
 import axios from "axios";
 import { GrFavorite } from "react-icons/gr";
 import { MdOutlineFavorite } from "react-icons/md";
+import { storage } from "../../FireBase";
+import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
+import { v4 } from "uuid";
 
 const PersonalPage = () => {
   const { role, token, userId } = useContext(userContext);
@@ -27,7 +30,7 @@ const PersonalPage = () => {
   };
   const getUserCourses = () => {
     axios
-      .get("http://localhost:5000/courses", {
+      .get("http://localhost:5000/courses/user", {
         headers: {
           authorization: `Bearer ${token}`
         }
@@ -41,6 +44,30 @@ const PersonalPage = () => {
         console.log(err);
       });
   };
+  const [imageUpload, setImageUpload] = useState(null);
+  const [imageList, setImageList] = useState([]);
+  const imageListRef = ref(storage, `images/`);
+  const uploadImage = () => {
+    if (imageUpload === null) return;
+    const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
+    uploadBytes(imageRef, imageUpload).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        setImageUpload((prev) => {
+          return [prev, url];
+        });
+        console.log("images upload");
+      });
+    });
+  };
+  useEffect(() => {
+    listAll(imageListRef).then((response) => {
+      response.items.forEach((item) => {
+        getDownloadURL(item).then((url) => {
+          setImageList((prev) => [...prev, url]);
+        });
+      });
+    });
+  }, []);
   useEffect(() => {
     getUserInfo();
     getUserCourses();
@@ -207,11 +234,12 @@ const PersonalPage = () => {
                   </p>
                   <img
                     src={
-                      course.photo ||
-                      "https://images.pexels.com/photos/461077/pexels-photo-461077.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                      course?.photo
+                        ? course.photo
+                        : "https://images.pexels.com/photos/461077/pexels-photo-461077.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
                     }
                     className="w-100"
-                    alt={course.title}
+                    alt={course?.title}
                   />
                   <hr className="mt-4" />
                   <span className="text-xs ">
