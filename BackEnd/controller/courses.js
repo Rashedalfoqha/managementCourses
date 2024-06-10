@@ -22,6 +22,7 @@ const createCourses = (req, res) => {
       });
   });
 };
+
 const getAllCoursesForUser = (req, res) => {
   const query = `SELECT 
   courses.*,

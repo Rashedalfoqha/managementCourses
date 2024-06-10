@@ -7,6 +7,7 @@ import Home from "./components/Home/Home";
 import AddCourses from "./components/addCourses/AddCourses";
 import Courses from "./components/courses/Courses";
 import Nav from "./components/navbar/Nav";
+import PersonalPage from "./components/personalPage/PersonalPage";
 
 export const userContext = createContext();
 function App() {
@@ -27,6 +28,7 @@ function App() {
             path="/courses"
             element={role === 1 ? <AddCourses /> : <Courses />}
           />
+          <Route path="/personal" element={<PersonalPage />} />
         </Routes>
       </userContext.Provider>
     </>
