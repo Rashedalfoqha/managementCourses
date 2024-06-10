@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const register = async (req, res) => {
   const {
-    photo,
+    image,
     cover,
     firstName,
     lastName,
@@ -32,7 +32,7 @@ const register = async (req, res) => {
   const query = `
     INSERT INTO users (
       role_id,
-      photo,
+      image,
       cover,
       firstName,
       lastName,
@@ -47,7 +47,7 @@ const register = async (req, res) => {
 
   const values = [
     role_id,
-    photo || null,
+    image || null,
     cover || null,
     firstName,
     lastName,
@@ -142,12 +142,12 @@ const getUserInfoById = (req, res) => {
 };
 const updateData = (req, res) => {
   const id = req.token.userId;
-  const { photo, cover, firstName, lastName, email, country } = req.body;
+  const { image, cover, firstName, lastName, email, country } = req.body;
 
   const query = `
     UPDATE users 
     SET 
-      photo = COALESCE($1, photo),
+      image = COALESCE($1, image),
       cover = COALESCE($2, cover),
       firstName = COALESCE($3, firstName),
       lastName = COALESCE($4, lastName),
@@ -159,7 +159,7 @@ const updateData = (req, res) => {
     RETURNING *;
   `;
 
-  const values = [photo, cover, firstName, lastName, email, country, id];
+  const values = [image, cover, firstName, lastName, email, country, id];
 
   pool
     .query(query, values)

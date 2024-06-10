@@ -32,5 +32,5 @@ coursesRouter.delete(
   softDeletedcourses
 );
 coursesRouter.get("/:id", getCoursesById);
-coursesRouter.get("/user", authentication, getAllCoursesByUserId);
+coursesRouter.get("/user" , authentication, getAllCoursesByUserId);
 module.exports = coursesRouter;

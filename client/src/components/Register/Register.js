@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [first, setFirst] = useState("");
@@ -11,6 +11,7 @@ const Register = () => {
   const [userType, setUserType] = useState("");
   const [country, setCountry] = useState("");
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const countryArray = [
     "United States",
@@ -254,6 +255,7 @@ const Register = () => {
     "Zambia",
     "Zimbabwe"
   ];
+  const navigate = useNavigate();
   const registerHandle = async (e) => {
     e.preventDefault();
 
@@ -261,7 +263,7 @@ const Register = () => {
       const response = await axios.post(
         "http://localhost:5000/users/register",
         {
-          photo: null,
+          image: null,
           cover: null,
           firstName: first,
           lastName: last,
@@ -274,6 +276,7 @@ const Register = () => {
       );
 
       console.log(response.data);
+      setSuccess("register successfully" || response.data.result.message);
     } catch (err) {
       console.log(err);
       if (err.response.status === 409) {
@@ -426,16 +429,19 @@ const Register = () => {
                   <p className="text-red-500 text-sm">{error}</p>
                 </div>
               )}
+              {success && (
+                <div className="mt-10 flex items-start">
+                  <p className="text-red-500 text-sm">{success}</p>
+                </div>
+              )}
               <div className="mt-10">
-                <Link to="/login">
-                  {" "}
-                  <button
-                    type="submit"
-                    className="w-max shadow-xl py-2.5 px-8 text-sm font-semibold rounded-md bg-transparent text-stone-950 border-stone-950 focus:outline-none"
-                  >
-                    Register
-                  </button>
-                </Link>
+                {" "}
+                <button
+                  type="submit"
+                  className="w-max shadow-xl py-2.5 px-8 text-sm font-semibold rounded-md bg-transparent text-stone-950 border-stone-950 focus:outline-none"
+                >
+                  Register
+                </button>
                 <p className="text-sm mt-8">
                   Already have an account?{" "}
                   <Link to="/login">

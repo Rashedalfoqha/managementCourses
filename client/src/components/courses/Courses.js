@@ -89,11 +89,10 @@ const Courses = () => {
                 <div className="py-4 px-8">
                   <img
                     src={
-                      course.instructorImage ||
-                      "https://tailwindcss.com/img/jonathan.jpg"
+                      course.image  || "https://tailwindcss.com/img/jonathan.jpg"
                     }
                     className="rounded-full h-12 w-12 mb-4"
-                    alt={course.instructorName}
+                    alt={course.image}
                   />
                   <a href="#">
                     <h4 className="text-lg mb-3 font-semibold">
@@ -105,7 +104,7 @@ const Courses = () => {
                   </p>
                   <img
                     src={
-                      course.image ||
+                      course.photo ||
                       "https://images.pexels.com/photos/461077/pexels-photo-461077.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
                     }
                     className="w-100"

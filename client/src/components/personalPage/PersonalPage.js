@@ -12,6 +12,101 @@ const PersonalPage = () => {
   const [userInfo, setUserInfo] = useState({});
   const [loading, setLoading] = useState(true);
   const [courses, setCourses] = useState([]);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [favorites, setFavorites] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [imageUrl, setImageUrl] = useState(null);
+  const [coverUrl, setCoverUrl] = useState(null);
+  const [imageUpload, setImageUpload] = useState(null);
+  const [coverUpload, setCoverUpload] = useState(null);
+  const [imageList, setImageList] = useState([]);
+  const [coverList, setCoverList] = useState([]);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [country, setCountry] = useState("");
+
+  const imageListRef = ref(storage, `images/`);
+  const coverListRef = ref(storage, `covers/`);
+  const updateUserData = (e) => {
+    e.preventDefault();
+    axios
+      .put(
+        "http://localhost:5000/users/update",
+        {
+          image: imageUrl,
+          cover: coverUrl,
+          firstName: firstName,
+          lastName: lastName,
+          country: country
+        },
+        {
+          headers: {
+            authorization: `Bearer ${token}`
+          }
+        }
+      )
+      .then((result) => {
+        console.log(result);
+        closeModal;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleFileChangeImage = (e) => {
+    setImageUpload(e.target.files[0]);
+  };
+
+  const handleFileChangeCover = (e) => {
+    setCoverUpload(e.target.files[0]);
+  };
+
+  const uploadImage = () => {
+    if (imageUpload === null) return;
+    const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
+    uploadBytes(imageRef, imageUpload).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        setImageUrl(url);
+        console.log("Image uploaded:", url);
+      });
+    });
+  };
+
+  const uploadCover = () => {
+    if (coverUpload === null) return;
+    const coverRef = ref(storage, `covers/${coverUpload.name + v4()}`);
+    uploadBytes(coverRef, coverUpload).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        setCoverUrl(url);
+        console.log("cover uploaded:", url);
+      });
+    });
+  };
+
+  useEffect(() => {
+    listAll(imageListRef).then((response) => {
+      response.items.forEach((item) => {
+        getDownloadURL(item).then((url) => {
+          setImageList((prev) => [...prev, url]);
+        });
+      });
+    });
+
+    listAll(coverListRef).then((response) => {
+      response.items.forEach((item) => {
+        getDownloadURL(item).then((url) => {
+          setCoverList((prev) => [...prev, url]);
+        });
+      });
+    });
+  }, []);
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const getUserInfo = () => {
     axios
@@ -30,7 +125,7 @@ const PersonalPage = () => {
   };
   const getUserCourses = () => {
     axios
-      .get("http://localhost:5000/courses/user", {
+      .get("http://localhost:5000/courses", {
         headers: {
           authorization: `Bearer ${token}`
         }
@@ -44,30 +139,43 @@ const PersonalPage = () => {
         console.log(err);
       });
   };
-  const [imageUpload, setImageUpload] = useState(null);
-  const [imageList, setImageList] = useState([]);
-  const imageListRef = ref(storage, `images/`);
-  const uploadImage = () => {
-    if (imageUpload === null) return;
-    const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
-    uploadBytes(imageRef, imageUpload).then((snapshot) => {
-      getDownloadURL(snapshot.ref).then((url) => {
-        setImageUpload((prev) => {
-          return [prev, url];
-        });
-        console.log("images upload");
+
+  const addFav = (id) => {
+    axios
+      .post(
+        `http://localhost:5000/fav/add`,
+        { course_id: id },
+        {
+          headers: {
+            authorization: `Bearer ${token}`
+          }
+        }
+      )
+      .then(() => {
+        console.log("added");
+        setFavorites((prev) => ({ ...prev, [id]: true }));
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    });
   };
-  useEffect(() => {
-    listAll(imageListRef).then((response) => {
-      response.items.forEach((item) => {
-        getDownloadURL(item).then((url) => {
-          setImageList((prev) => [...prev, url]);
-        });
+
+  const deleteFav = (id) => {
+    axios
+      .delete(`http://localhost:5000/fav/delete/${id}`, {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      })
+      .then(() => {
+        console.log("deleted");
+        setFavorites((prev) => ({ ...prev, [id]: false }));
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    });
-  }, []);
+  };
+
   useEffect(() => {
     getUserInfo();
     getUserCourses();
@@ -77,18 +185,245 @@ const PersonalPage = () => {
       <section class="w-full overflow-hidden dark:bg-gray-900">
         <div class="w-full mx-auto">
           <img
-            src={userInfo.cover}
+            src={
+              userInfo.cover ||
+              "https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+            }
             alt="User Cover"
             class="w-full xl:h-[20rem] lg:h-[22rem] md:h-[16rem] sm:h-[13rem] xs:h-[9.5rem]"
           />
-
           <div class="w-full mx-auto flex justify-center">
             <img
-              src={userInfo.photo}
+              src={
+                userInfo.image ||
+                "https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+              }
               alt="User Profile"
               class="rounded-full object-cover xl:w-[16rem] xl:h-[16rem] lg:w-[16rem] lg:h-[16rem] md:w-[12rem] md:h-[12rem] sm:w-[10rem] sm:h-[10rem] xs:w-[8rem] xs:h-[8rem] outline outline-2 outline-offset-2 outline-yellow-500 shadow-xl relative xl:bottom-[7rem] lg:bottom-[8rem] md:bottom-[6rem] sm:bottom-[5rem] xs:bottom-[4.3rem]"
             />
           </div>
+          {isModalOpen && (
+            <div className="fixed z-10 inset-0 overflow-y-auto">
+              <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0 ">
+                <div
+                  className="fixed inset-0 transition-opacity"
+                  aria-hidden="true"
+                >
+                  <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                </div>
+                <span
+                  className="hidden sm:inline-block sm:align-middle sm:h-screen"
+                  aria-hidden="true"
+                >
+                  &#8203;
+                </span>
+                <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                  <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div className="sm:flex sm:items-start w-full h-full">
+                      <form className="p-16" onSubmit={updateUserData}>
+                        <div className="mb-6">
+                          <label
+                            htmlFor="title"
+                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          >
+                            FirstName
+                          </label>
+                          <input
+                            type="text"
+                            id="FirstName"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="FirstName"
+                            onChange={(e) => {
+                              setFirstName(e.target.value);
+                            }}
+                          />
+                        </div>
+                        <div className="mb-6">
+                          <label
+                            htmlFor="description"
+                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          >
+                            LastName
+                          </label>
+                          <input
+                            type="text"
+                            id="LastName"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="LastName ..."
+                            onChange={(e) => {
+                              setLastName(e.target.value);
+                            }}
+                          />
+                        </div>
+                        <div className="mb-6">
+                          <label
+                            htmlFor="description"
+                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          >
+                            country
+                          </label>
+                          <input
+                            type="text"
+                            id="country"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="Description ..."
+                            onChange={(e) => {
+                              setCountry(e.target.value);
+                            }}
+                          />
+                        </div>
+
+                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                          <label
+                            htmlFor="dropzone-image"
+                            className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 dark:hover:border-gray-500"
+                          >
+                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                              <svg
+                                className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                                viewBox="0 0 20 16"
+                                fill="currentColor"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                                />
+                              </svg>
+                              <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                                <span className="font-semibold">
+                                  Click to upload user Photo
+                                </span>{" "}
+                                or drag and drop
+                              </p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">
+                                SVG, PNG, JPG or GIF (MAX. 800x400px)
+                              </p>
+                            </div>
+                            <input
+                              id="dropzone-image"
+                              type="file"
+                              className="hidden"
+                              onChange={handleFileChangeImage}
+                            />
+                          </label>
+                          {imageUpload && (
+                            <button
+                              onClick={uploadImage}
+                              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md focus:outline-none hover:bg-blue-600"
+                            >
+                              Upload Image
+                            </button>
+                          )}
+                          {imageUrl && (
+                            <img
+                              src={imageUrl}
+                              alt="Uploaded Image"
+                              className="mt-4 max-w-full"
+                            />
+                          )}
+                        </div>
+
+                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                          <label
+                            htmlFor="dropzone-cover"
+                            className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 dark:hover:border-gray-500"
+                          >
+                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                              <svg
+                                className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                                viewBox="0 0 20 16"
+                                fill="currentColor"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                                />
+                              </svg>
+                              <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                                <span className="font-semibold">
+                                  Click to upload Cover User
+                                </span>{" "}
+                                or drag and drop
+                              </p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">
+                                SVG, PNG, JPG or GIF (MAX. 800x400px)
+                              </p>
+                            </div>
+                            <input
+                              id="dropzone-cover"
+                              type="file"
+                              className="hidden"
+                              onChange={handleFileChangeCover}
+                            />
+                          </label>
+                          {coverUpload && (
+                            <button
+                              onClick={uploadCover}
+                              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md focus:outline-none hover:bg-blue-600"
+                            >
+                              Upload cover
+                            </button>
+                          )}
+                          {coverUrl && (
+                            <cover controls className="mt-4 max-w-full">
+                              <source src={coverUrl} type="cover/mp4" />
+                              Your browser does not support the cover tag.
+                            </cover>
+                          )}
+                        </div>
+
+                        <div className="flex items-start mb-6">
+                          <div className="flex items-center h-5">
+                            <input
+                              id="agreeTerms"
+                              type="checkbox"
+                              value=""
+                              className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
+                            />
+                          </div>
+                          <label
+                            htmlFor="agreeTerms"
+                            className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                          >
+                            I agree with the{" "}
+                            <a
+                              href="#"
+                              className="text-blue-600 hover:underline dark:text-blue-500"
+                            >
+                              update data
+                            </a>
+                            .
+                          </label>
+                        </div>
+
+                        <button
+                          type="submit"
+                          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        >
+                          Submit
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button
+                      type="button"
+                      className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:w-auto sm:text-sm"
+                      onClick={closeModal}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div class="xl:w-[80%] lg:w-[90%] md:w-[94%] sm:w-[96%] xs:w-[92%] mx-auto flex flex-col gap-4 justify-center items-center relative xl:-top-[6rem] lg:-top-[6rem] md:-top-[4rem] sm:-top-[3rem] xs:-top-[2.2rem]">
             <h1 class="text-center text-gray-800 dark:text-white text-4xl font-serif">
@@ -107,94 +442,17 @@ const PersonalPage = () => {
               autem quisquam, quia incidunt excepturi, possimus odit
               praesentium?
             </p>
-
-            <div class="px-2 flex rounded-sm bg-gray-200 text-gray-500 dark:bg-gray-700 dark:bg-opacity-30 dark:text-gray-700 hover:text-gray-600 hover:dark:text-gray-400">
-              <a href="https://www.linkedin.com/in/samuel-abera-6593a2209/">
-                <div
-                  data-title="LinkedIn"
-                  class="p-2 hover:text-primary hover:dark:text-primary"
-                >
-                  <svg
-                    class="w-8 h-8 text-gray-800 dark:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M12.51 8.796v1.697a3.738 3.738 0 0 1 3.288-1.684c3.455 0 4.202 2.16 4.202 4.97V19.5h-3.2v-5.072c0-1.21-.244-2.766-2.128-2.766-1.827 0-2.139 1.317-2.139 2.676V19.5h-3.19V8.796h3.168ZM7.2 6.106a1.61 1.61 0 0 1-.988 1.483 1.595 1.595 0 0 1-1.743-.348A1.607 1.607 0 0 1 5.6 4.5a1.601 1.601 0 0 1 1.6 1.606Z"
-                      clip-rule="evenodd"
-                    />
-                    <path d="M7.2 8.809H4V19.5h3.2V8.809Z" />
-                  </svg>
-                </div>
-              </a>
-              <a href="https://twitter.com/Samuel7Abera7">
-                <div
-                  data-title="X"
-                  class="p-2 hover:text-primary hover:dark:text-primary"
-                >
-                  <svg
-                    class="w-8 h-8 text-gray-800 dark:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M13.795 10.533 20.68 2h-3.073l-5.255 6.517L7.69 2H1l7.806 10.91L1.47 22h3.074l5.705-7.07L15.31 22H22l-8.205-11.467Zm-2.38 2.95L9.97 11.464 4.36 3.627h2.31l4.528 6.317 1.443 2.02 6.018 8.409h-2.31l-4.934-6.89Z" />
-                  </svg>
-                </div>
-              </a>
-              <a href="">
-                <div
-                  data-title="Facebook"
-                  class="p-2 hover:text-blue-500 hover:dark:text-blue-500"
-                >
-                  <svg
-                    class="w-8 h-8 text-gray-800 dark:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M13.135 6H15V3h-1.865a4.147 4.147 0 0 0-4.142 4.142V9H7v3h2v9.938h3V12h2.021l.592-3H12V6.591A.6.6 0 0 1 12.592 6h.543Z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </div>
-              </a>
-              <a href="https://www.youtube.com/@silentcoder7">
-                <div
-                  data-title="Youtube"
-                  class="p-2 hover:text-primary hover:dark:text-primary"
-                >
-                  <svg
-                    class="w-8 h-8 text-gray-800 dark:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M21.7 8.037a4.26 4.26 0 0 0-.789-1.964 2.84 2.84 0 0 0-1.984-.839c-2.767-.2-6.926-.2-6.926-.2s-4.157 0-6.928.2a2.836 2.836 0 0 0-1.983.839 4.225 4.225 0 0 0-.79 1.965 30.146 30.146 0 0 0-.2 3.206v1.5a30.12 30.12 0 0 0 .2 3.206c.094.712.364 1.39.784 1.972.604.536 1.38.837 2.187.848 1.583.151 6.731.2 6.731.2s4.161 0 6.928-.2a2.844 2.844 0 0 0 1.985-.84 4.27 4.27 0 0 0 .787-1.965 30.12 30.12 0 0 0 .2-3.206v-1.516a30.672 30.672 0 0 0-.202-3.206Zm-11.692 6.554v-5.62l5.4 2.819-5.4 2.801Z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </div>
-              </a>
-            </div>
+            {userId == userInfo.id && (
+              <button
+                onClick={() => {
+                  openModal();
+                }}
+                className="py-3 px-4 inline-flex items-center   text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+              >
+                Update user information
+              </button>
+            )}
+            <div class="px-2 flex rounded-sm bg-gray-200 text-gray-500 dark:bg-gray-700 dark:bg-opacity-30 dark:text-gray-700 hover:text-gray-600 hover:dark:text-gray-400"></div>
           </div>
         </div>
       </section>
@@ -210,7 +468,7 @@ const PersonalPage = () => {
           </div>
         ) : (
           <div className="sm:grid lg:grid-cols-3 sm:grid-cols-2 gap-10">
-            {courses.map((course) => (
+            {courses.map((course, index) => (
               <div
                 key={course.userId}
                 className="hover:bg-gray-900 hover:text-white transition duration-300 max-w-sm rounded overflow-hidden shadow-lg"
@@ -242,14 +500,20 @@ const PersonalPage = () => {
                     alt={course?.title}
                   />
                   <hr className="mt-4" />
-                  <span className="text-xs ">
-                    <GrFavorite className="w-5 h-5 m-3 " />
-                    <MdOutlineFavorite className="w-5 h-5 m-3" />
-                  </span>
-                  &nbsp;
-                  <span className="text-xs text-gray-500">
-                    {course.category}
-                  </span>
+                  <div className="flex">
+                    <button
+                      onClick={() =>
+                        favorites[course.id]
+                          ? deleteFav(course.id)
+                          : addFav(course.id)
+                      }
+                      className={`${
+                        favorites[course.id] ? "text-red-500" : "text-gray-500"
+                      }`}
+                    >
+                      {favorites[course.id] ? "Unfavorite" : "Favorite"}
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

@@ -18,7 +18,7 @@ CREATE TABLE roles (
         id SERIAL PRIMARY KEY,
         role_id INT REFERENCES roles(id),
         course_id INT,
-        photo VARCHAR,
+        image VARCHAR,
         user_type VARCHAR(255),
         cover VARCHAR,
         firstName VARCHAR(255),
