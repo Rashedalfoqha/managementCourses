@@ -13,8 +13,9 @@ const register = async (req, res) => {
     password,
     user_type
   } = req.body;
-  const salt = process.env.PASS.toString();
-  const bcryptPassword = await bcrypt.hash(password, 7);
+  const Salt = process.env.PASS;
+  console.log();
+  const bcryptPassword = await bcrypt.hash(password, Number(Salt));
   let role_id;
 
   if (user_type === "student") {

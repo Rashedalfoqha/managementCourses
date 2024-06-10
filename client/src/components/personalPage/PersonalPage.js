@@ -25,9 +25,6 @@ const PersonalPage = () => {
   const [lastName, setLastName] = useState("");
   const [country, setCountry] = useState("");
 
-  const imageListRef = ref(storage, `images/`);
-  const coverListRef = ref(storage, `covers/`);
-
   const updateUserData = (e) => {
     e.preventDefault();
 
@@ -188,7 +185,8 @@ const PersonalPage = () => {
         console.log(err);
       });
   };
-
+  const imageListRef = ref(storage, `images/`);
+  const coverListRef = ref(storage, `covers/`);
   useEffect(() => {
     getUserInfo();
     getUserCourses();
@@ -495,7 +493,7 @@ const PersonalPage = () => {
                     className="rounded-full h-12 w-12 mb-4"
                     alt="User Profile"
                   />
-                 
+
                   <a href="#">
                     <h4 className="text-lg mb-3 font-semibold">
                       {course.title}
