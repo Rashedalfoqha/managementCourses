@@ -261,7 +261,7 @@ const Register = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/users/register",
+        "https://managementcourses.onrender.com/users/register",
         {
           image: null,
           cover: null,

@@ -16,7 +16,7 @@ const User = () => {
 
   const getUserInfo = () => {
     axios
-      .get(`http://localhost:5000/users/${id}`)
+      .get(`https://managementcourses.onrender.com/users/${id}`)
       .then((result) => {
         console.log(result.data.result);
         setUserInfo(result.data.result);
@@ -28,7 +28,7 @@ const User = () => {
 
   const getUserCourses = () => {
     axios
-      .get(`http://localhost:5000/courses/${id}`)
+      .get(`https://managementcourses.onrender.com/courses/${id}`)
       .then((result) => {
         if (result.data.result.length >= 0) {
           setCourses(result.data.result);
@@ -49,7 +49,7 @@ const User = () => {
   const addFav = (id) => {
     axios
       .post(
-        `http://localhost:5000/fav/add`,
+        `https://managementcourses.onrender.com/fav/add`,
         { course_id: id },
         {
           headers: {
@@ -68,7 +68,7 @@ const User = () => {
 
   const deleteFav = (id) => {
     axios
-      .delete(`http://localhost:5000/fav/delete/${id}`, {
+      .delete(`https://managementcourses.onrender.com/fav/delete/${id}`, {
         headers: {
           authorization: `Bearer ${token}`
         }

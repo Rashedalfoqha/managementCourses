@@ -95,7 +95,7 @@ const CoursesDetails = () => {
     e.preventDefault();
 
     axios
-      .delete(`http://localhost:5000/courses/delete/${coursesInfo.id}`, {
+      .delete(`https://managementcourses.onrender.com/courses/delete/${coursesInfo.id}`, {
         headers: {
           authorization: `Bearer ${token}`
         }
@@ -121,7 +121,7 @@ const CoursesDetails = () => {
     if (isDataModified) {
       axios
         .put(
-          `http://localhost:5000/courses/update/${coursesInfo.id}`,
+          `https://managementcourses.onrender.com/courses/update/${coursesInfo.id}`,
           {
             photo: imageUrl || coursesInfo.photo,
             video: videoUrl || coursesInfo.video,
@@ -156,7 +156,7 @@ const CoursesDetails = () => {
   const addFav = (id) => {
     axios
       .post(
-        `http://localhost:5000/fav/add`,
+        `https://managementcourses.onrender.com/fav/add`,
         { course_id: id },
         {
           headers: {
@@ -175,7 +175,7 @@ const CoursesDetails = () => {
 
   const deleteFav = (id) => {
     axios
-      .delete(`http://localhost:5000/fav/delete/${id}`, {
+      .delete(`https://managementcourses.onrender.com/fav/delete/${id}`, {
         headers: {
           authorization: `Bearer ${token}`
         }
@@ -191,7 +191,7 @@ const CoursesDetails = () => {
 
   const detailsCourses = () => {
     axios
-      .get(`http://localhost:5000/courses/${id}`)
+      .get(`https://managementcourses.onrender.com/courses/${id}`)
       .then((result) => {
         console.log(result.data.result);
         setCoursesInfo(result.data.result[0]);

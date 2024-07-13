@@ -7,7 +7,7 @@ const Teacher = () => {
 
   const fetchTeachers = () => {
     axios
-      .get("http://localhost:5000/users/teacher/all")
+      .get("https://managementcourses.onrender.com/users/teacher/all")
       .then((response) => {
         setTeachers(response.data.result);
       })

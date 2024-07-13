@@ -11,7 +11,7 @@ const Myfav = () => {
 
   const deleteFav = (id) => {
     axios
-      .delete(`http://localhost:5000/fav/delete/${id}`, {
+      .delete(`https://managementcourses.onrender.com/fav/delete/${id}`, {
         headers: {
           authorization: `Bearer ${token}`
         }
@@ -26,7 +26,7 @@ const Myfav = () => {
 
   const myFav = () => {
     axios
-      .get("http://localhost:5000/courses/users/cour", {
+      .get("https://managementcourses.onrender.com/courses/users/cour", {
         headers: {
           authorization: `Bearer ${token}`
         }

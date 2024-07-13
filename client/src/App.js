@@ -22,11 +22,11 @@ function App() {
   return (
     <>
       <userContext.Provider value={{ token, userId, isLoggedIn, role }}>
-        <Nav />
+        {isLoggedIn && <Nav />}
         <Routes>
           {" "}
-          <Route path="/" element={isLoggedIn && <Home />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/home" element={isLoggedIn && <Home />} />
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route
             path="/courses"
@@ -34,7 +34,10 @@ function App() {
           />
           <Route path="/personal" element={<PersonalPage />} />
           <Route path="/newcourses" element={<AddCourses />} />
-          <Route path="/deatils/:id" element={<CoursesDeatils />} />
+          <Route
+            path="/deatils/:id"
+            element={isLoggedIn && <CoursesDeatils />}
+          />
           <Route path="/fav" element={<Myfav />} />
           <Route path="/user/:id" element={<User />} />
           <Route path="/teacher" element={<Teacher />} />

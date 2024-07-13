@@ -38,7 +38,7 @@ const PersonalPage = () => {
     if (isDataModified) {
       axios
         .put(
-          "http://localhost:5000/users/update",
+          "https://managementcourses.onrender.com/users/update",
           {
             image: imageUrl || userInfo.image,
             cover: coverUrl || userInfo.cover,
@@ -120,7 +120,7 @@ const PersonalPage = () => {
 
   const getUserInfo = () => {
     axios
-      .get("http://localhost:5000/users", {
+      .get("https://managementcourses.onrender.com/users", {
         headers: {
           authorization: `Bearer ${token}`
         }
@@ -135,7 +135,7 @@ const PersonalPage = () => {
   };
   const getUserCourses = () => {
     axios
-      .get("http://localhost:5000/courses", {
+      .get("https://managementcourses.onrender.com/courses", {
         headers: {
           authorization: `Bearer ${token}`
         }
@@ -153,7 +153,7 @@ const PersonalPage = () => {
   const addFav = (id) => {
     axios
       .post(
-        `http://localhost:5000/fav/add`,
+        `https://managementcourses.onrender.com/fav/add`,
         { course_id: id },
         {
           headers: {
@@ -172,7 +172,7 @@ const PersonalPage = () => {
 
   const deleteFav = (id) => {
     axios
-      .delete(`http://localhost:5000/fav/delete/${id}`, {
+      .delete(`https://managementcourses.onrender.com/fav/delete/${id}`, {
         headers: {
           authorization: `Bearer ${token}`
         }

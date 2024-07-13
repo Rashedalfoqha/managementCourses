@@ -13,7 +13,7 @@ const AddCourses = () => {
     e.preventDefault();
     axios
       .post(
-        "http://localhost:5000/courses/create",
+        "https://managementcourses.onrender.com/courses/create",
         {
           photo: imageUrl,
           video: videoUrl,

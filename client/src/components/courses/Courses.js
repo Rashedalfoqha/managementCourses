@@ -14,7 +14,7 @@ const Courses = () => {
   const addFav = (id) => {
     axios
       .post(
-        `http://localhost:5000/fav/add`,
+        `https://managementcourses.onrender.com/fav/add`,
         { course_id: id },
         {
           headers: {
@@ -30,11 +30,11 @@ const Courses = () => {
         console.log(err);
       });
   };
-  const deleteFav = () => {
+  const deleteFav = (id) => {
     axios
       .delete(
-        `http://localhost:5000/fav/delete/${id}`,
-        { course_id: coursesInfo.id },
+        `https://managementcourses.onrender.com/fav/delete/${id}`,
+        { course_id: id },
         {
           headers: {
             authorization: `Bearer ${token}`
@@ -52,7 +52,7 @@ const Courses = () => {
 
   const createCourses = () => {
     axios
-      .get("http://localhost:5000/courses/all")
+      .get("https://managementcourses.onrender.com/courses/all")
       .then((result) => {
         setCourses(result.data.result);
         setLoading(false);
@@ -66,7 +66,7 @@ const Courses = () => {
   useEffect(() => {
     const createCourses = () => {
       axios
-        .get("http://localhost:5000/courses/all")
+        .get("https://managementcourses.onrender.com/courses/all")
         .then((result) => {
           setCourses(result.data.result);
           setLoading(false);

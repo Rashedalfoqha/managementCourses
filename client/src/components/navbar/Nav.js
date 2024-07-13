@@ -18,7 +18,7 @@ const Nav = () => {
   };
   const getUserInfo = () => {
     axios
-      .get("http://localhost:5000/users", {
+      .get("https://managementcourses.onrender.com/users", {
         headers: {
           authorization: `Bearer ${token}`
         }
